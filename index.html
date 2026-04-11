@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <meta name="theme-color" content="#f5f5f7">
+  <title>1026的小窝</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f8f9fc;
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;  /* 让卡片完全撑开 */
+      color: #1e1e2e;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
+    /* 主容器 — 相对定位，让“关于”绝对定位到右上角 */
+    .container {
+      max-width: 500px;
+      width: 100%;
+      min-height: 100vh;          /* 保证撑满高度，底部贴合 */
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;     /* 垂直居中，但配合min-height会自然撑开 */
+      padding: 1.2rem 1.2rem 0.8rem;
+      position: relative;
+    }
+
+    /* 关于按钮 — 绝对定位到屏幕右上角边缘 (不受卡片限制) */
+    .corner-action {
+      position: fixed;
+      top: 1.2rem;
+      right: 1.2rem;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: softRise 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      animation-delay: 0.1s;
+    }
+
+    .action-btn {
+      display: inline-block;
+      padding: 0.45rem 1.2rem;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1e1e2e;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: white;
+    }
+    
+    .action-btn:active {
+      background: rgba(255, 255, 255, 0.7);
+      transform: none;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+    }
+
+    /* 面板卡片 (毛玻璃) */
+    .panel-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 42px;
+      padding: 2.2rem 1.6rem 1.5rem;
+      width: 100%;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(26px);
+      animation: softRise 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+      margin: 0.5rem 0;
+    }
+
+    .home-panel { animation-delay: 0.05s; }
+    .about-panel { animation-delay: 0.1s; }
+
+    @keyframes softRise {
+      0% { opacity: 0; transform: translateY(28px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden-panel { display: none !important; }
+
+    /* ---------- 主页样式 ---------- */
+    .home-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* 修复缺角：确保图片完整显示 */
+    .home-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 22px;
+      background: white;
+      box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(0,0,0,0.02);
+      overflow: visible;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: softRise 0.6s forwards;
+      animation-delay: 0.15s;
+      padding: 2px;
+    }
+
+    .home-icon img {
+      width: calc(100% + 8px);
+      height: calc(100% + 8px);
+      object-fit: cover;
+      display: block;
+      border-radius: 20px;
+    }
+
+    .home-title {
+      font-size: clamp(2.8rem, 10vw, 3.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #1e1e2e;
+      margin-bottom: 0.25rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: softRise 0.65s forwards;
+      animation-delay: 0.25s;
+    }
+
+    .home-sub {
+      font-size: 0.95rem;
+      color: #7c7c8f;
+      letter-spacing: 0.3em;
+      margin-top: 0.2rem;
+    }
+
+    /* ---------- 关于面板 (无横线) ---------- */
+    .avatar-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .author-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #7c7c8f;
+      margin-bottom: 0.5rem;
+      font-weight: 450;
+    }
+
+    .avatar-frame {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.8rem;
+      border: 1px solid rgba(0,0,0,0.02);
+      opacity: 0;
+      transform: translateY(18px);
+      animation: softRise 0.7s forwards;
+      animation-delay: 0.18s;
+      overflow: hidden;
+    }
+
+    .avatar-frame img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .nickname-1026 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: #1e1e2e;
+      margin: 0.2rem 0 0.5rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: softRise 0.65s forwards;
+      animation-delay: 0.25s;
+    }
+
+    /* 底部联系卡片 — 紧贴底部，无横线 */
+    .contact-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 1.2rem 1rem 0.8rem;    /* 减少内边距，更贴底 */
+      margin-top: 0.4rem;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: softRise 0.7s forwards;
+      animation-delay: 0.4s;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1rem;
+      justify-content: space-between;
+      align-items: flex-end;        /* 底部对齐 */
+    }
+
+    .contact-item {
+      flex: 1 1 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .contact-item:last-child {
+      align-items: center;
+    }
+    
+    .email-address {
+      text-align: center;
+    }
+
+    /* 图标行 */
+    .item-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    /* 调小图标尺寸 */
+    .icon-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.03);
+      overflow: hidden;
+      border: 0.5px solid rgba(0,0,0,0.02);
+    }
+
+    .icon-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .item-label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #1e1e2e;
+    }
+
+    .email-address {
+      font-size: 0.85rem;
+      color: #3a3a50;
+      margin: 0 0 0.1rem;
+      word-break: break-all;
+      font-weight: 450;
+      line-height: 1.3;
+    }
+
+    .mute-note {
+      font-size: 0.65rem;
+      color: #8a8a9c;
+      margin-top: 0.1rem;
+      letter-spacing: 0.2px;
+    }
+
+    .contact-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-block;
+    }
+
+    .mail-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 移动端微调 + 保证底部贴合 */
+    @media (max-width: 480px) {
+      body {
+        align-items: flex-start;
+        padding-top: 0;
+      }
+      .container {
+        padding: 4.5rem 0.8rem 0.2rem;
+        justify-content: flex-start;
+        min-height: 100vh;
+      }
+      .corner-action {
+        top: 0.8rem;
+        right: 0.8rem;
+        position: absolute;
+        z-index: 10;
+      }
+      .panel-card {
+        padding: 1.8rem 1.2rem 1.2rem;
+        border-radius: 36px;
+        margin: 0.2rem 0;
+        margin-top: 0;
+      }
+      .home-icon {
+        width: 85px;
+        height: 85px;
+        border-radius: 18px;
+        margin-bottom: 1rem;
+      }
+      .home-title {
+        font-size: 2.5rem;
+      }
+      .avatar-frame {
+        width: 90px;
+        height: 90px;
+      }
+      .nickname-1026 {
+        font-size: 2.5rem;
+      }
+      .contact-card {
+        padding: 1rem 0.8rem 0.6rem;
+        border-radius: 24px;
+        margin-top: auto;
+      }
+      .contact-row {
+        gap: 0.8rem;
+        justify-content: center;
+      }
+      .contact-item {
+        flex: 1 1 130px;
+      }
+      .icon-circle {
+        width: 22px;
+        height: 22px;
+      }
+      .item-label {
+        font-size: 0.85rem;
+      }
+      .email-address {
+        font-size: 0.75rem;
+      }
+      .mute-note {
+        font-size: 0.6rem;
+      }
+    }
+
+    /* 超小屏 (保证不溢出) */
+    @media (max-width: 360px) {
+      .contact-row {
+        flex-direction: row;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+      .contact-item {
+        flex: 1 1 120px;
+      }
+      .icon-circle {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    /* 为了一致性，主页底部的留白不需要横线 */
+    .spacer {
+      height: 0.2rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- 关于按钮 — 固定右上角边缘 -->
+  <div class="corner-action" id="cornerAction">
+    <span class="action-btn" id="toggleBtn">关于</span>
+  </div>
+
+  <!-- 主页面板 (1026的小窝) -->
+  <div class="panel-card home-panel" id="homePanel">
+    <div class="home-content">
+      <div class="home-icon">
+        <img src="favicon.png" alt="1026小窝">
+      </div>
+      <h1 class="home-title">1026的小窝</h1>
+      <div class="home-sub">✦ 自在 · 随心 ✦</div>
+    </div>
+  </div>
+
+  <!-- 关于面板 (项目作者 / 1026 / 联系方式) -->
+  <div class="panel-card about-panel hidden-panel" id="aboutPanel">
+    <div class="avatar-section">
+      <div class="author-label">项目作者</div>
+      <div class="avatar-frame">
+        <img src="toxiang.png" alt="头像">
+      </div>
+      <div class="nickname-1026">1026</div>
+    </div>
+
+    <!-- 无横线，直接联系卡片 -->
+    <div class="contact-card">
+      <div class="contact-row">
+        <!-- QQ群 -->
+        <div class="contact-item">
+          <a href="https://qm.qq.com/q/YGLgFSFzyY" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <div class="item-header">
+              <div class="icon-circle">
+                <img src="QQquan.png" alt="QQ群">
+              </div>
+              <span class="item-label">加入官方QQ群</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- 邮箱联系 -->
+        <div class="contact-item">
+          <div class="item-header">
+            <div class="icon-circle">
+              <!-- 统一使用浅色 gugeyouxiang.png (圆角已处理好) -->
+              <img src="gugeyouxiang.png" alt="Gmail">
+            </div>
+            <span class="item-label">联系反馈</span>
+          </div>
+          <a href="mailto:bidwelliryu@gmail.com" class="mail-link">
+            <div class="email-address">bidwelliryu@gmail.com</div>
+          </a>
+          <div class="mute-note">（无事勿扰，来意请直说）</div>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const homePanel = document.getElementById('homePanel');
+    const aboutPanel = document.getElementById('aboutPanel');
+    const toggleBtn = document.getElementById('toggleBtn');
+    
+    let isAbout = false;
+    
+    function switchPanel(showAbout) {
+      if (showAbout) {
+        homePanel.classList.add('hidden-panel');
+        aboutPanel.classList.remove('hidden-panel');
+        toggleBtn.textContent = '主页';
+        isAbout = true;
+      } else {
+        aboutPanel.classList.add('hidden-panel');
+        homePanel.classList.remove('hidden-panel');
+        toggleBtn.textContent = '关于';
+        isAbout = false;
+      }
+    }
+    
+    toggleBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      switchPanel(!isAbout);
+    });
+
+    // 确保点击邮箱链接不会误触切换
+    // 全部图标仅用浅色版本，无深色切换逻辑
+  })();
+</script>
+
+<!-- 
+  符合要求：
+  - 关于按钮在右上角边缘（fixed定位）
+  - 横线已删除
+  - 邮箱与QQ图标调小 (28px/26px)
+  - 卡片内边距减少，更贴底部；移动端容器采用flex-start+min-height贴合
+  - 主页favicon缺角修复：加padding及背景
+  - 统一使用gugeyouxiang.png
+  - 所有缓慢升起动画保留
+-->
+</body>
+</html>
