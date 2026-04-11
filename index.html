@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <!-- 网站图标：根目录 favicon.png -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <meta name="theme-color" content="#f5f5f7">
+  <title>1026的小窝</title>
+  <style>
+    /* 全局重置 & 浅色/深色变量 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-page: #f8f9fc;
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-border: rgba(255, 255, 255, 0.6);
+      --text-primary: #1e1e2e;
+      --text-secondary: #3a3a50;
+      --text-muted: #7c7c8f;
+      --divider-light: #c0bcd0;
+      --shadow-sm: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+      --icon-bg: white;
+      --gmail-icon: url('gugeyouxiang.png');  /* 默认浅色图标 */
+    }
+
+    /* 深色模式覆盖 */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-page: #12121a;
+        --card-bg: rgba(28, 28, 38, 0.75);
+        --card-border: rgba(70, 70, 90, 0.5);
+        --text-primary: #f0eefc;
+        --text-secondary: #cfcbe5;
+        --text-muted: #9a96b5;
+        --divider-light: #4a4660;
+        --shadow-sm: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+        --icon-bg: #2a2a38;
+        --gmail-icon: url('gugeyouxiangheise.png');
+      }
+    }
+
+    body {
+      background: var(--bg-page);
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', 'Noto Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.2s;
+    }
+
+    /* 主容器 */
+    .container {
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 右上角按钮区域 (缓慢升起动画) */
+    .corner-action {
+      align-self: flex-end;
+      margin-bottom: 0.5rem;
+      margin-right: 0.3rem;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: softRise 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      animation-delay: 0.1s;
+    }
+
+    .action-btn {
+      display: inline-block;
+      padding: 0.5rem 1.4rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 40px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      text-decoration: none;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    /* 通用卡片样式 */
+    .panel-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 42px;
+      padding: 2.5rem 1.8rem 2rem;
+      width: 100%;
+      box-shadow: var(--shadow-sm), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+      border: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(26px);
+      animation: softRise 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+    }
+
+    /* 主页卡片延迟稍短 */
+    .home-panel {
+      animation-delay: 0.05s;
+    }
+
+    .about-panel {
+      animation-delay: 0.1s;
+    }
+
+    @keyframes softRise {
+      0% { opacity: 0; transform: translateY(28px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 隐藏面板 (切换用) */
+    .hidden-panel {
+      display: none !important;
+    }
+
+    /* ----- 主页内容 (1026的小窝) ----- */
+    .home-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .home-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 24px;           /* 圆角方形/圆角卡片感 */
+      background: var(--icon-bg);
+      box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: softRise 0.6s forwards;
+      animation-delay: 0.15s;
+    }
+
+    .home-icon img {
+      width: 85%;
+      height: 85%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .home-title {
+      font-size: 3.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: softRise 0.65s forwards;
+      animation-delay: 0.25s;
+    }
+
+    .home-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      letter-spacing: 0.3em;
+      margin-top: 0.25rem;
+    }
+
+    /* ----- 关于面板内容 (与之前一致，微调) ----- */
+    .avatar-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .author-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      font-weight: 450;
+    }
+
+    .avatar-frame {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--icon-bg);
+      box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.9rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      opacity: 0;
+      transform: translateY(18px);
+      animation: softRise 0.7s forwards;
+      animation-delay: 0.18s;
+      overflow: hidden;
+    }
+
+    .avatar-frame img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      background: var(--icon-bg);
+    }
+
+    .nickname-1026 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 0.2rem;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: softRise 0.65s forwards;
+      animation-delay: 0.25s;
+    }
+
+    .divider-light {
+      width: 60px;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--divider-light), transparent);
+      margin: 0.2rem 0 1.2rem 0;
+      opacity: 0.5;
+    }
+
+    /* 底部联系卡片 */
+    .contact-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 1.5rem 1.2rem 1.2rem;
+      margin-top: 0.6rem;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: softRise 0.7s forwards;
+      animation-delay: 0.4s;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem 1rem;
+      justify-content: space-around;
+    }
+
+    .contact-item {
+      flex: 1 1 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .item-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .icon-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--icon-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      border: 0.5px solid rgba(255,255,255,0.1);
+    }
+
+    .icon-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 邮箱图标动态切换：使用CSS content配合背景？但最好用img + JS切换？ 
+       因深色模式通过媒体查询不能改变img的src，我们用<picture>或js监听。这里用JS监听模式变化更可靠 */
+    .item-label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+
+    .email-address {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin: 0 0 0.1rem;          /* 向上贴合 */
+      word-break: break-all;
+      font-weight: 450;
+    }
+
+    .mute-note {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.1rem;
+      letter-spacing: 0.2px;
+    }
+
+    .contact-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .mail-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 移动端适配 */
+    @media (max-width: 480px) {
+      body { padding: 0.8rem; }
+      .panel-card { padding: 2rem 1.2rem 1.8rem; border-radius: 36px; }
+      .avatar-frame { width: 100px; height: 100px; }
+      .nickname-1026 { font-size: 2.6rem; }
+      .home-title { font-size: 2.6rem; }
+      .contact-card { padding: 1.2rem 1rem; }
+      .contact-row { flex-direction: column; gap: 1rem; }
+    }
+
+    /* 确保底部有空间 */
+    .spacer {
+      height: 0.5rem;
+    }
+
+    /* 主页关于按钮点击切换 */
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- 右上角按钮，根据状态显示“关于”或“主页” -->
+  <div class="corner-action" id="cornerAction">
+    <span class="action-btn" id="toggleBtn">关于</span>
+  </div>
+
+  <!-- 主页面板 (默认显示) -->
+  <div class="panel-card home-panel" id="homePanel">
+    <div class="home-content">
+      <div class="home-icon">
+        <img src="favicon.png" alt="1026小窝图标">
+      </div>
+      <h1 class="home-title">1026的小窝</h1>
+      <div class="home-sub">✦ 自在 · 随心 ✦</div>
+      <div style="height: 0.5rem;"></div>
+    </div>
+  </div>
+
+  <!-- 关于面板 (默认隐藏) -->
+  <div class="panel-card about-panel hidden-panel" id="aboutPanel">
+    <div class="avatar-section">
+      <div class="author-label">项目作者</div>
+      <div class="avatar-frame">
+        <img src="toxiang.png" alt="头像">
+      </div>
+      <div class="nickname-1026">1026</div>
+    </div>
+    <div class="divider-light"></div>
+
+    <div class="contact-card">
+      <div class="contact-row">
+        <!-- QQ群 -->
+        <div class="contact-item">
+          <a href="https://qm.qq.com/q/YGLgFSFzyY" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <div class="item-header">
+              <div class="icon-circle">
+                <img src="QQquan.png" alt="QQ群">
+              </div>
+              <span class="item-label">加入官方QQ群</span>
+            </div>
+          </a>
+        </div>
+        <!-- 邮箱联系 -->
+        <div class="contact-item">
+          <div class="item-header">
+            <div class="icon-circle" id="gmailIconContainer">
+              <!-- 邮箱图标会根据模式动态切换，用JS处理 -->
+              <img id="gmailIconImg" src="gugeyouxiang.png" alt="Gmail">
+            </div>
+            <span class="item-label">联系反馈</span>
+          </div>
+          <a href="mailto:bidwelliryu@gmail.com" class="mail-link">
+            <div class="email-address">bidwelliryu@gmail.com</div>
+          </a>
+          <div class="mute-note">（无事勿扰，来意请直说）</div>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // 切换面板：主页 / 关于
+    const homePanel = document.getElementById('homePanel');
+    const aboutPanel = document.getElementById('aboutPanel');
+    const toggleBtn = document.getElementById('toggleBtn');
+    
+    let isAbout = false;  // 当前是否显示关于面板
+    
+    function switchPanel(showAbout) {
+      if (showAbout) {
+        homePanel.classList.add('hidden-panel');
+        aboutPanel.classList.remove('hidden-panel');
+        toggleBtn.textContent = '主页';
+        isAbout = true;
+      } else {
+        aboutPanel.classList.add('hidden-panel');
+        homePanel.classList.remove('hidden-panel');
+        toggleBtn.textContent = '关于';
+        isAbout = false;
+      }
+      // 重新触发动画? 简单起见保留卡片自带动画(因重新显示会重播)
+    }
+    
+    toggleBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      switchPanel(!isAbout);
+    });
+    
+    // 深色/浅色模式切换邮箱图标 (支持 prefers-color-scheme 变化)
+    const gmailImg = document.getElementById('gmailIconImg');
+    
+    function updateGmailIcon() {
+      if (!gmailImg) return;
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (isDark) {
+        gmailImg.src = 'gugeyouxiangheise.png';
+      } else {
+        gmailImg.src = 'gugeyouxiang.png';
+      }
+    }
+    
+    // 初始更新
+    updateGmailIcon();
+    
+    // 监听系统主题变化
+    const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    darkModeQuery.addEventListener('change', updateGmailIcon);
+    
+    // 额外处理：如果图片加载失败可以回退（可选）
+    gmailImg.addEventListener('error', function() {
+      // 如果深色图标不存在，回退到浅色，但一般存在。
+    });
+    
+    // 确保点击关于时也更新图标（因为可能在深色切换后第一次显示）
+    // 同时处理动画重播小技巧：面板切换时强制重绘? 已OK
+    
+    // 移动端底部贴合：无需额外
+  })();
+</script>
+
+<!-- 
+  设计要点：
+  - 主页只显示 favicon.png 圆角图标 + “1026的小窝”
+  - 点击右上角“关于”切换到详情面板 (作者头像、1026、QQ群、邮箱)
+  - 深色模式自动切换邮箱图标 (gugeyouxiangheise.png)
+  - 邮箱文字向上贴合调整 margin
+  - 全部采用毛玻璃白/深色卡片，缓慢升起动画
+-->
+</body>
+</html>
