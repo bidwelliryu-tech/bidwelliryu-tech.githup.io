@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>首页</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #ffffff;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', 'Noto Sans', sans-serif;
+            line-height: 1.5;
+            color: #1e1e1e;
+            padding: 0 1.5rem 3rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 0 1rem 2rem;
+            }
+        }
+
+        .container {
+            max-width: 1280px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .home-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 36px;
+            padding: 2.8rem 2.5rem;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0,0,0,0.02) inset;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            text-align: center;
+            max-width: 480px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(25px);
+            animation: riseIn 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+        }
+
+        @keyframes riseIn {
+            0% { opacity: 0; transform: translateY(25px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .avatar-img {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 1.5rem;
+            border-radius: 22px;
+            box-shadow: 0 12px 22px -6px rgba(0,0,0,0.08);
+            object-fit: cover;
+            display: block;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 650;
+            letter-spacing: -0.02em;
+            color: #1e1e2e;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-sub {
+            font-size: 1rem;
+            color: #6e6e8a;
+            border-top: 1px solid #efeff4;
+            padding-top: 1.2rem;
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 560px) {
+            .welcome-card {
+                padding: 2rem 1.5rem;
+            }
+            .welcome-title {
+                font-size: 2rem;
+            }
+            .avatar-img {
+                width: 80px;
+                height: 80px;
+                border-radius: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="home-content">
+        <div class="welcome-card">
+            <img src="favicon.png" alt="头像" class="avatar-img">
+            <h1 class="welcome-title">1026的小窝</h1>
+            <p style="color: #4a4a60; margin-bottom: 0.5rem;">自在 · 随心 · 分享</p>
+            <div class="welcome-sub">
+                欢迎来到我的小窝，这里有一些实用工具与记录。
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
