@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>使用教程</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --bg-page: #f5f7fa; --card-bg: rgba(255, 255, 255, 0.85); --text-primary: #1e1e2a; --text-secondary: #3a3a50; --text-muted: #6e6e8a; --border-light: rgba(0, 0, 0, 0.05); --shadow-card: 0 20px 35px -8px rgba(0, 0, 0, 0.07), 0 8px 18px rgba(0, 0, 0, 0.03); --shadow-hover: 0 28px 45px -10px rgba(0, 0, 0, 0.12), 0 12px 24px rgba(0, 0, 0, 0.06); --accent-blue: #2563eb; --accent-blue-hover: #1a4fba; --divider: #e2e4e9; --navbar-bg: #ffffff; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg-page: #0b0b12; --card-bg: rgba(22, 22, 30, 0.9); --text-primary: #e8e8f0; --text-secondary: #bdbdd6; --text-muted: #8a8aa3; --border-light: rgba(255, 255, 255, 0.04); --shadow-card: 0 20px 35px -8px rgba(0, 0, 0, 0.7); --shadow-hover: 0 28px 45px -10px #000000b3; --accent-blue: #b0b0c0; --accent-blue-hover: #d0d0e0; --divider: #2a2a3c; --navbar-bg: #1a1a2a; }
+    }
+    body { background: var(--bg-page); font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; color: var(--text-primary); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    .navbar { width: 100%; background: var(--navbar-bg); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; height: 60px; box-shadow: none; position: relative; z-index: 50; }
+    .navbar-brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-primary); }
+    .brand-logo { width: 28px; height: 28px; background-image: url('favicon.png'); background-size: cover; background-position: center; border-radius: 6px; }
+    .brand-name { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.02em; }
+    .navbar-nav { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-item { list-style: none; }
+    .nav-link { text-decoration: none; color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; padding: 0.5rem 0.8rem; border-radius: 20px; transition: all 0.2s ease; }
+    .nav-link:hover { color: var(--text-primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .nav-link.active { color: #7c4dff; font-weight: 600; }
+    .menu-btn { display: none; width: 36px; height: 36px; border-radius: 50%; background: transparent; border: none; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; outline: none; }
+    .menu-line { width: 16px; height: 2px; background: var(--text-secondary); border-radius: 1px; transition: all 0.3s ease; }
+    .menu-btn.active .menu-line:nth-child(1) { transform: rotate(45deg) translateY(5px); }
+    .menu-btn.active .menu-line:nth-child(2) { opacity: 0; }
+    .menu-btn.active .menu-line:nth-child(3) { transform: rotate(-45deg) translateY(-5px); }
+    .dropdown-menu { position: fixed; top: 60px; left: 0; right: 0; background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 0 0 12px 12px; padding: 0.5rem 0; z-index: 100; border: 1px solid var(--border-light); box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-10px); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s; border-top: none; list-style: none; }
+    .dropdown-menu.active { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+    .dropdown-menu .nav-item { opacity: 0; transform: translateY(-15px); transition: all 0.3s ease; }
+    .dropdown-menu.active .nav-item:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.05s; }
+    .dropdown-menu.active .nav-item:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
+    .dropdown-menu.active .nav-item:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.15s; }
+    .dropdown-menu.active .nav-item:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+    .dropdown-link { display: block; padding: 0.75rem 1.5rem; text-decoration: none; color: var(--text-secondary); font-size: 0.9rem; transition: all 0.2s ease; }
+    .dropdown-link:hover { background: rgba(0,0,0,0.04); color: var(--text-primary); }
+    .dropdown-link.active { background: rgba(124,77,255,0.08); color: #9333ea; font-weight: 600; }
+    .tutorial-container { max-width: 780px; width: 100%; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+    .tutorial-card { background: var(--card-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 36px; padding: 2.5rem 2.2rem; box-shadow: var(--shadow-card); border: 1px solid var(--border-light); transition: transform 0.3s ease, box-shadow 0.35s ease; opacity: 0; transform: translateX(-45px); animation: slideInLeft 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; }
+    @keyframes slideInLeft { 0% { opacity: 0; transform: translateX(-45px); } 100% { opacity: 1; transform: translateX(0); } }
+    .tutorial-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+    .tutorial-title { font-size: 2.4rem; font-weight: 650; letter-spacing: -0.02em; text-align: center; margin-bottom: 2rem; color: var(--text-primary); border-bottom: 1.5px solid var(--divider); padding-bottom: 1.2rem; }
+    .section { margin-bottom: 2rem; }
+    .notice { background: rgba(128, 128, 160, 0.06); padding: 1.1rem 1.5rem; border-radius: 22px; border-left: 4px solid var(--accent-blue); margin-bottom: 2rem; }
+    .notice p { margin-bottom: 0.5rem; }
+    .blue-link { color: var(--accent-blue); font-weight: 600; text-decoration: none; border-bottom: 1px dotted var(--accent-blue); transition: all 0.15s; }
+    .blue-link:hover { color: var(--accent-blue-hover); border-bottom: 1px solid var(--accent-blue-hover); }
+    .step-item { margin-bottom: 1.5rem; }
+    .step-title { font-weight: 650; font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text-primary); }
+    .step-desc { color: var(--text-secondary); padding-left: 0.2rem; }
+    .inline-code { background: rgba(0, 0, 0, 0.04); padding: 0.15rem 0.4rem; border-radius: 8px; font-family: 'SF Mono', 'Menlo', monospace; font-size: 0.9em; border: 0.5px solid var(--border-light); }
+    @media (prefers-color-scheme: dark) { .inline-code { background: rgba(255, 255, 255, 0.06); } }
+    .demo-image-wrapper { display: block; width: 100%; max-width: 400px; margin: 1.2rem auto 0.5rem; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-light); background: rgba(0,0,0,0.02); transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    .demo-image { display: block; width: 100%; height: auto; object-fit: contain; transition: transform 0.3s ease, filter 0.2s; cursor: zoom-in; }
+    .demo-image-wrapper:hover { box-shadow: 0 16px 30px -8px rgba(0,0,0,0.15); transform: scale(1.01); border-color: var(--accent-blue); }
+    .demo-image-wrapper:hover .demo-image { transform: scale(1.02); }
+    .demo-image-wrapper:active { transform: scale(0.99); }
+    .feedback-box { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1.5px solid var(--divider); }
+    .feedback-primary { font-size: 1.1rem; font-weight: 550; margin-bottom: 0.5rem; color: var(--text-primary); }
+    .email-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.8rem; margin-bottom: 0.25rem; }
+    .email-address { font-family: monospace; font-size: 1rem; color: var(--accent-blue); text-decoration: none; font-weight: 500; }
+    .email-address:hover { text-decoration: underline; }
+    .mute-hint { font-size: 0.8rem; color: var(--text-muted); margin-left: 0.2rem; }
+    .qq-feedback { margin-top: 1rem; color: var(--text-secondary); }
+    @media (max-width: 560px) {
+      .navbar { height: 56px; padding: 0 1rem; }
+      .navbar-nav { display: none; }
+      .menu-btn { display: flex; }
+      .dropdown-menu { top: 56px; }
+      .tutorial-container { padding: 1.5rem 1rem 2rem; }
+      .tutorial-card { padding: 1.8rem 1.4rem; border-radius: 30px; }
+      .tutorial-title { font-size: 2rem; margin-bottom: 1.5rem; }
+      .notice { padding: 1rem 1.2rem; }
+      .step-title { font-size: 1.1rem; }
+      .feedback-primary { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><div class="brand-logo"></div><span class="brand-name">1026的小窝</span></a>
+  <ul class="navbar-nav">
+    <li class="nav-item"><a href="index.html" class="nav-link">首页</a></li>
+    <li class="nav-item"><a href="syjc.html" class="nav-link active">使用教程</a></li>
+    <li class="nav-item"><a href="gxrz.html" class="nav-link">更新日志</a></li>
+    <li class="nav-item"><a href="#" class="nav-link" onclick="sessionStorage.setItem('showAbout','true'); location.href='index.html';">关于</a></li>
+  </ul>
+  <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">
+    <span class="menu-line"></span><span class="menu-line"></span><span class="menu-line"></span>
+  </button>
+</nav>
+<ul class="dropdown-menu" id="dropdownMenu">
+  <li class="nav-item"><a href="index.html" class="dropdown-link">首页</a></li>
+  <li class="nav-item"><a href="syjc.html" class="dropdown-link active">使用教程</a></li>
+  <li class="nav-item"><a href="gxrz.html" class="dropdown-link">更新日志</a></li>
+  <li class="nav-item"><a href="#" class="dropdown-link" onclick="sessionStorage.setItem('showAbout','true'); location.href='index.html';">关于</a></li>
+</ul>
+<div class="tutorial-container">
+  <div class="tutorial-card">
+    <h1 class="tutorial-title">使用教程</h1>
+    <div class="notice">
+      <p style="font-weight: 600; margin-bottom: 8px;">需要 ROOT 权限</p>
+      <p>要使用我们的工具，前提是您必须已经获取了 ROOT 权限。<br>若没有 ROOT 权限，详细可咨询项目作者 <a href="https://qm.qq.com/q/lQM6tTaQ4S" target="_blank" rel="noopener noreferrer" class="blue-link">点我跳转官方QQ群</a></p>
+      <p style="margin-top: 8px;">确保已有 ROOT 后即可使用。</p>
+    </div>
+    <div class="section">
+      <div class="step-item"><div class="step-title">1. 准备终端工具</div><div class="step-desc">首先你必须有一个终端工具。推荐使用 MT 管理器，也可使用 NP 管理器、Termux 终端等……</div></div>
+      <div class="step-item"><div class="step-title">2. 放置工具并赋予权限</div><div class="step-desc">从官网下载我们的工具后，在你下载好的路径下，把工具复制或移动到 <span class="inline-code">/data/</span> 任意一个文件夹或是 data 里都行。<br>长按工具选择「属性」，勾选 <span class="inline-code">777</span> 权限（详细可看图片，仅供参考，每个管理器或终端的赋予权限方法都有所不同）。</div>
+        <div class="demo-image-wrapper"><img src="ck.png" alt="权限设置参考图" class="demo-image" loading="lazy"></div>
+      </div>
+      <div class="step-item"><div class="step-title">3. 执行工具</div><div class="step-desc">赋予 777 权限后，轻触工具点击执行（每个管理器或终端的执行方法都有所不同）。<br>出现文字后可根据提示，按照自己的需求来选择。</div></div>
+    </div>
+    <div class="feedback-box">
+      <div class="feedback-primary">如遇 bug 或意见可通过此邮箱反馈</div>
+      <div class="email-line"><a href="mailto:bidwelliryu@gmail.com" class="email-address">bidwelliryu@gmail.com</a><span class="mute-hint">（无事勿扰，来意请直说）</span></div>
+      <div class="qq-feedback">也可通过加入 <a href="https://qm.qq.com/q/lQM6tTaQ4S" target="_blank" rel="noopener noreferrer" class="blue-link">官方QQ群</a> 进行反馈</div>
+    </div>
+  </div>
+</div>
+<script>
+  function toggleMenu() {
+    const menuBtn = document.getElementById('menuBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    menuBtn.classList.toggle('active');
+    dropdownMenu.classList.toggle('active');
+  }
+  document.addEventListener('click', function(e) {
+    const menuBtn = document.getElementById('menuBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    if (!menuBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      menuBtn.classList.remove('active');
+      dropdownMenu.classList.remove('active');
+    }
+  });
+</script>
+</body>
+</html>
