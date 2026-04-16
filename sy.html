@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>首页</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #ffffff; font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', 'Noto Sans', sans-serif; line-height: 1.5; color: #1e1e1e; min-height: 100vh; display: flex; flex-direction: column; }
+        .container { width: 100%; max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; min-height: 100vh; }
+        .welcome-card { background: #ffffff; border-radius: 36px; padding: 2.8rem 2rem; box-shadow: none; border: none; text-align: center; opacity: 0; transform: translateY(25px); animation: riseIn 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        @keyframes riseIn { 0% { opacity: 0; transform: translateY(25px); } 100% { opacity: 1; transform: translateY(0); } }
+        .avatar-img { width: 90px; height: 90px; margin: 0 auto 1.5rem; border-radius: 22px; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); object-fit: cover; display: block; }
+        .welcome-title { font-size: 2.5rem; font-weight: 650; letter-spacing: -0.02em; color: #1e1e2e; margin-bottom: 0.5rem; }
+        .welcome-tagline { color: #4a4a60; margin-bottom: 0.8rem; font-size: 1rem; }
+        .welcome-message { font-size: 0.95rem; color: #6e6e8a; border-top: 1px solid #efeff4; padding-top: 1.2rem; margin-top: 0.2rem; line-height: 1.6; }
+        .download-hint { margin-top: 1.2rem; font-size: 0.75rem; color: #8a8a9c; text-align: center; }
+        .usage-stats { margin-top: 1.5rem; }
+        .stat-label { font-size: 1rem; font-weight: 500; color: #2c3e50; margin-bottom: 4px; opacity: 0.8; }
+        .count-wrapper { display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .number-highlight { font-size: 2.4rem; font-weight: 800; line-height: 1.3; display: inline-block; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: #f97316; vertical-align: middle; }
+        .suffix-text { font-size: 1.2rem; font-weight: 500; color: #1a2634; }
+        .stat-note { margin-top: 8px; font-size: 0.85rem; color: #64748b; }
+        .footer-copyright { text-align: center; padding: 2rem 1rem 1.5rem; font-size: 0.8rem; color: #9a9ab0; border-top: 1px solid #f0f0f0; margin-top: 2rem; }
+        .github-credit { margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; opacity: 0.7; }
+        .github-icon { width: 18px; height: 18px; border-radius: 50%; object-fit: cover; }
+        .github-text { font-size: 0.75rem; color: #7c7c8f; }
+        @media (max-width: 560px) {
+            .welcome-card { padding: 2.2rem 1.5rem; }
+            .welcome-title { font-size: 2.2rem; }
+            .avatar-img { width: 80px; height: 80px; border-radius: 18px; }
+            .footer-copyright { padding: 1.5rem 1rem 1rem; }
+            .number-highlight { font-size: 2.2rem; }
+        }
+        @supports not (background-clip: text) {
+            .number-highlight { background: none; -webkit-text-fill-color: #f97316; color: #f97316; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="welcome-card">
+        <img src="favicon.png" alt="头像" class="avatar-img">
+        <h1 class="welcome-title">1026的小站</h1>
+        <div class="welcome-tagline">自在 · 随心 · 分享</div>
+        <div class="welcome-message">欢迎来到我的小站，这里有一些实用工具与记录。</div>
+        <div class="usage-stats">
+            <div class="stat-label">我们的工具已被使用</div>
+            <div class="count-wrapper">
+                <span id="dynamicCount" class="number-highlight">0</span>
+                <span class="suffix-text">次</span>
+            </div>
+            <div class="stat-note">感谢每一份信任</div>
+        </div>
+        <div class="download-hint">若需下载工具 请跳转至更新日志页面</div>
+    </div>
+    <div class="footer-copyright">
+        2026 © 1026的小站<br>项目作者:1026
+        <div class="github-credit">
+            <img src="GitHub.png" class="github-icon" alt="GitHub">
+            <span class="github-text">托管于 GitHub Pages</span>
+        </div>
+    </div>
+</div>
+<script>
+(function() {
+    const TARGET_NUMBER = 1000;
+    const ANIMATION_DURATION = 2000;
+    const countElement = document.getElementById('dynamicCount');
+    if (!countElement) return;
+    let animationFrameId = null;
+    let startTime = null;
+    let currentDisplayValue = 0;
+    const customEase = (t) => {
+        const threshold = 0.3;
+        if (t <= threshold) {
+            const progress = t / threshold;
+            return 0.02 * progress;
+        } else {
+            const remainingT = (t - threshold) / (1 - threshold);
+            const easedRemaining = 1 - Math.pow(1 - remainingT, 2.5);
+            return 0.02 + (0.98 * easedRemaining);
+        }
+    };
+    function updateDisplay(value) {
+        countElement.textContent = value;
+    }
+    function step(timestamp) {
+        if (startTime === null) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+        let linearProgress = Math.min(elapsed / ANIMATION_DURATION, 1);
+        const easedProgress = customEase(linearProgress);
+        const currentValue = Math.floor(easedProgress * TARGET_NUMBER);
+        if (currentValue !== currentDisplayValue) {
+            currentDisplayValue = currentValue;
+            updateDisplay(currentDisplayValue);
+        }
+        if (linearProgress < 1) {
+            animationFrameId = requestAnimationFrame(step);
+        } else {
+            updateDisplay(TARGET_NUMBER);
+            currentDisplayValue = TARGET_NUMBER;
+            animationFrameId = null;
+            startTime = null;
+        }
+    }
+    function startCountAnimation() {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+        startTime = null;
+        currentDisplayValue = 0;
+        updateDisplay(0);
+        animationFrameId = requestAnimationFrame(step);
+    }
+    const STORAGE_KEY = '1026_count_animated';
+    if (sessionStorage.getItem(STORAGE_KEY)) {
+        updateDisplay(TARGET_NUMBER);
+        return;
+    }
+    let observer = null;
+    let hasAnimated = false;
+    function handleIntersect(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !hasAnimated) {
+                hasAnimated = true;
+                sessionStorage.setItem(STORAGE_KEY, '1');
+                startCountAnimation();
+                if (observer) {
+                    observer.disconnect();
+                    observer = null;
+                }
+            }
+        });
+    }
+    if (typeof IntersectionObserver !== 'undefined') {
+        observer = new IntersectionObserver(handleIntersect, { threshold: 0.2 });
+        observer.observe(countElement);
+    } else {
+        window.addEventListener('load', function() {
+            if (!hasAnimated) {
+                hasAnimated = true;
+                sessionStorage.setItem(STORAGE_KEY, '1');
+                startCountAnimation();
+            }
+        });
+    }
+    if (typeof IntersectionObserver !== 'undefined') {
+        const rect = countElement.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isVisible && !hasAnimated) {
+            setTimeout(() => {
+                if (!hasAnimated) {
+                    hasAnimated = true;
+                    sessionStorage.setItem(STORAGE_KEY, '1');
+                    if (observer) {
+                        observer.disconnect();
+                        observer = null;
+                    }
+                    startCountAnimation();
+                }
+            }, 80);
+        }
+    }
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            if (!hasAnimated && countElement) {
+                hasAnimated = true;
+                sessionStorage.setItem(STORAGE_KEY, '1');
+                if (observer) {
+                    observer.disconnect();
+                    observer = null;
+                }
+                startCountAnimation();
+            }
+        }, 5000);
+    });
+})();
+</script>
+</body>
+</html>
