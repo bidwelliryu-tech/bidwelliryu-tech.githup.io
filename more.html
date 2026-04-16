@@ -47,8 +47,8 @@
         .download-link:hover { background: #e1effa; color: #1a4f85; }
         .tool-description { font-size: 0.9rem; color: #555; margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid #f3f3f3; }
         .preview-images { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.2rem 0 0.5rem; }
-        .preview-img { flex: 1 1 0; min-width: 150px; max-width: 100%; border-radius: 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.05); transition: all 0.25s; cursor: pointer; }
-        .preview-img:hover { transform: translateY(-8px); box-shadow: 0 22px 36px rgba(0,0,0,0.12); }
+        .preview-img, .preview-video { flex: 1 1 0; min-width: 150px; max-width: 100%; border-radius: 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.05); transition: all 0.25s; cursor: default; object-fit: cover; }
+        .preview-img:hover, .preview-video:hover { transform: translateY(-8px); box-shadow: 0 22px 36px rgba(0,0,0,0.12); }
         .blue-link { color: #2b6eb3; text-decoration: underline; text-underline-offset: 2px; }
         .blue-link:hover { color: #1a4f85; }
 
@@ -80,7 +80,10 @@
         }
         .navbar, .time-display { display: none; }
     </style>
-    <!-- 预加载所有图标图片 -->
+    <!-- 预加载视频和图片 -->
+    <link rel="preload" as="video" href="lv1.mp4">
+    <link rel="preload" as="video" href="lv2.mp4">
+    <link rel="preload" as="image" href="3lv3.png">
     <link rel="preload" as="image" href="SukiSU%20Ultra.png">
     <link rel="preload" as="image" href="Kitsune%20Mask.png">
     <link rel="preload" as="image" href="KernelSU_Next.png">
@@ -164,8 +167,8 @@
             </div>
             <div class="tool-description">暂无介绍详细可加入官方QQ群 了解详细</div>
             <div class="preview-images">
-                <img src="3lv1.png" class="preview-img" alt="3lv1" loading="lazy" onmouseover="this.style.transform='translateY(-8px)';" onmouseout="this.style.transform='translateY(0)';">
-                <img src="3lv2.png" class="preview-img" alt="3lv2" loading="lazy" onmouseover="this.style.transform='translateY(-8px)';" onmouseout="this.style.transform='translateY(0)';">
+                <video class="preview-video" autoplay loop muted playsinline disablePictureInPicture controlslist="nodownload nofullscreen noremoteplayback" src="lv1.mp4" preload="auto"></video>
+                <video class="preview-video" autoplay loop muted playsinline disablePictureInPicture controlslist="nodownload nofullscreen noremoteplayback" src="lv2.mp4" preload="auto"></video>
                 <img src="3lv3.png" class="preview-img" alt="3lv3" loading="lazy" onmouseover="this.style.transform='translateY(-8px)';" onmouseout="this.style.transform='translateY(0)';">
             </div>
         </div>
@@ -210,6 +213,19 @@
                 maskList.insertAdjacentElement('afterend', btn);
             }
         }
+
+        // 视频自动播放控制：当卡片进入视口时播放，离开时暂停
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
+            });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('.preview-video').forEach(video => videoObserver.observe(video));
     })();
 </script>
 </body>
