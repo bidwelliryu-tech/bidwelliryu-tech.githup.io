@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <link rel="icon" type="image/webp" href="favicon.webp">
+  <link rel="apple-touch-icon" href="favicon.webp">
+  <meta name="theme-color" content="#ffffff">
+  <title>赞赏支持-1026的小站</title>
+  <meta property="og:title" content="赞赏支持-1026的小站">
+  <meta property="og:description" content="您的赞赏是持续更新的动力">
+  <meta property="og:image" content="https://hq1026.top/favicon.webp">
+  <meta property="og:url" content="https://hq1026.top/hqzs">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="赞赏支持-1026的小站">
+  <meta name="twitter:description" content="您的赞赏是持续更新的动力">
+  <meta name="twitter:image" content="https://hq1026.top/favicon.webp">
+  <link rel="preload" as="image" href="zanzhu.png">
+  <link rel="preload" as="image" href="zfb.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { background: #ffffff; font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif; color: #1e1e2e; line-height: 1.5; min-height: 100vh; padding: 20px; }
+    .container { max-width: 500px; margin: 0 auto; padding: 20px 0 40px; }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #2c7da0; text-decoration: none; font-size: 0.9rem; opacity: 0; animation: fadeInUp 0.4s ease forwards; animation-delay: 0.1s; }
+    .sponsor-card { background: #ffffff; border-radius: 36px; padding: 2rem 1.5rem; border: 1px solid #f0f0f0; text-align: center; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.5s ease forwards; animation-delay: 0.2s; }
+    .sponsor-title { font-size: 1.8rem; font-weight: 600; color: #1e1e2e; margin-bottom: 1rem; }
+    .sponsor-desc { font-size: 1rem; color: #4a4a60; margin-bottom: 2rem; border-top: 1px solid #efeff4; padding-top: 1.2rem; line-height: 1.6; }
+    .qr-grid { display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; margin: 1.5rem 0; }
+    .qr-item { flex: 1; min-width: 200px; text-align: center; opacity: 0; transform: translateY(15px); animation: fadeInUp 0.5s ease forwards; }
+    .qr-item:first-child { animation-delay: 0.3s; }
+    .qr-item:last-child { animation-delay: 0.4s; }
+    .qr-img { width: 100%; max-width: 220px; height: auto; border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); background: #fafafa; transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .qr-img:hover { transform: translateY(-5px); box-shadow: 0 16px 28px rgba(0,0,0,0.1); }
+    .qr-label { margin-top: 0.5rem; font-size: 0.85rem; color: #7c7c8f; }
+    .footer-note { margin-top: 2rem; font-size: 0.75rem; color: #9a9ab0; text-align: center; opacity: 0; animation: fadeInUp 0.4s ease forwards; animation-delay: 0.5s; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 560px) {
+      .container { padding: 10px 0 30px; }
+      .sponsor-card { padding: 1.5rem 1rem; }
+      .sponsor-title { font-size: 1.5rem; }
+      .qr-img { max-width: 180px; }
+    }
+    /* === 深色模式 === */
+    
+      html.dark body { background: #14161a; color: #e9e6df; }
+      html.dark .sponsor-card { background: #1b1e24; border-color: #2a2f37; }
+      html.dark .sponsor-title { color: #e9e6df; }
+      html.dark .sponsor-desc { color: #b9b6ae; border-color: #2a2f37; }
+      html.dark .qr-img { box-shadow: 0 8px 20px rgba(0,0,0,0.3); background: #22262d; }
+      html.dark .qr-img:hover { box-shadow: 0 16px 28px rgba(0,0,0,0.4); }
+      html.dark .qr-label { color: #8a8aa3; }
+      html.dark .footer-note { color: #6a6a7a; }
+      html.dark .back-link { color: #a8896a; }
+    
+  </style>
+<script>try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
+
+<style>
+    @media (prefers-reduced-motion: no-preference) {
+        @view-transition { navigation: auto; }
+        ::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
+        ::view-transition-new(root) { animation: hqNtFade .2s ease both; }
+        @keyframes hqNtFade { from { opacity: 0 } to { opacity: 1 } }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="about.html" class="back-link">← 返回关于</a>
+  <div class="sponsor-card">
+    <div class="sponsor-title">赞赏支持</div>
+    <div class="sponsor-desc">如果这些内容对你有帮助，欢迎赞赏支持服务器运营成本。</div>
+    <div class="qr-grid">
+      <div class="qr-item">
+        <img src="zanzhu.png" class="qr-img" alt="微信赞赏码" loading="eager">
+        <div class="qr-label">微信赞赏</div>
+      </div>
+      <div class="qr-item">
+        <img src="zfb.png" class="qr-img" alt="支付宝收款码" loading="eager">
+        <div class="qr-label">支付宝收款</div>
+      </div>
+    </div>
+    <div class="footer-note">感谢您的支持，本站会持续更新。</div>
+  </div>
+</div>
+</body>
+</html>

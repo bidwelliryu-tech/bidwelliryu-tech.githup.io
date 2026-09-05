@@ -1,0 +1,51 @@
+[
+  {
+    "version": "v1.4",
+    "dateTime": "2026.3.14 23:41",
+    "changes": [
+      "增加和平精英查询举报数量功能"
+    ],
+    "downloadLink": ""
+  },
+  {
+    "version": "v1.31",
+    "dateTime": "2026.3.8 8:29",
+    "changes": [
+      "修复语法报错"
+    ],
+    "downloadLink": ""
+  },
+  {
+    "version": "v1.3",
+    "dateTime": "2026.3.4 14:35",
+    "changes": [
+      "加入三角洲国服被举报查询数量功能"
+    ],
+    "downloadLink": ""
+  },
+  {
+    "version": "v1.2",
+    "dateTime": "2026.2.28 7:31",
+    "changes": [
+      "正式替换为云更新（后续更新无需替换新工具）",
+      "加了多个网络请求方案"
+    ],
+    "downloadLink": ""
+  },
+  {
+    "version": "v1.1",
+    "dateTime": "2026.2.12 9:38",
+    "changes": [
+      "新增和平精英清理"
+    ],
+    "downloadLink": ""
+  },
+  {
+    "version": "v1.0",
+    "dateTime": "2026.2.10 22:31",
+    "changes": [
+      "初始版本：支持三角洲国服清理"
+    ],
+    "downloadLink": ""
+  }
+]
