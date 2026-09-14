@@ -700,28 +700,96 @@
 
 </head>
 
+<script>
+(function () {
+    try {
+        var ORDER = {
+            '/': 1, '/index.html': 1,
+            '/syjc.html': 2,
+            '/gxrz.html': 3,
+            '/about.html': 4,
+            '/more.html': 5,
+            '/hqzs.html': 6,
+            '/play.html': 7
+        };
+        var cur = ORDER[location.pathname] || 0;
+        var prev = parseInt(sessionStorage.getItem('hqNavFrom') || '0', 10) || 0;
+        if (cur) { sessionStorage.setItem('hqNavFrom', String(cur)); }
+        if (prev && cur && cur !== prev) {
+            document.documentElement.classList.add(cur > prev ? 'hq-dir-fwd' : 'hq-dir-back');
+        }
+    } catch (e) {}
+})();
+</script>
+
 <body>
 
 <style>
-    .hqNt-mask{position:fixed;inset:0;z-index:4000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(20,20,20,.35);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
-    .hqNt-mask[hidden]{display:none}
-    .hqNt-glass{width:min(400px,100%);padding:24px 24px 20px;border-radius:16px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(24px) saturate(1.5);backdrop-filter:blur(24px) saturate(1.5);border:1px solid rgba(255,255,255,.55);box-shadow:0 18px 50px rgba(0,0,0,.16);animation:hqNtIn .22s ease both}
-    html.dark .hqNt-glass{background:rgba(29,33,39,.52);border-color:rgba(255,255,255,.09)}
-    @keyframes hqNtIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
-    .hqNt-mask.hqNt-close{animation:hqNtFade .2s ease both}
-    .hqNt-mask.hqNt-close .hqNt-glass{animation:hqNtBye .2s ease both}
-    @keyframes hqNtFade{to{opacity:0}}
-    @keyframes hqNtBye{to{opacity:0;transform:scale(.97) translateY(8px)}}
-    .hqNt-title{font-size:16px;font-weight:600;color:var(--black);letter-spacing:-.01em}
-    .hqNt-body{margin:10px 0 14px;font-size:13.5px;line-height:1.9;color:var(--gray-1)}
-    .hqNt-body strong{color:var(--accent-strong);font-size:15px}
-    .hqNt-input{display:block;width:100%;height:38px;margin:10px 0 10px;padding:0 12px;border:1px solid rgba(255,255,255,.5);border-radius:8px;background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--black);font-size:14px;font-family:inherit;outline:none}
-    .hqNt-input:focus{border-color:var(--accent)}
-    html.dark .hqNt-input{background:rgba(29,33,39,.4);border-color:rgba(255,255,255,.09)}
-    .hqNt-hint{font-size:12.5px;color:var(--gray-2);margin-bottom:10px}
-    .hqNt-btn{display:block;width:100%;height:38px;border:none;border-radius:8px;background:var(--gray-5);color:var(--gray-2);font-size:13px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background .2s ease,color .2s ease}
-    .hqNt-btn.ok{background:var(--accent);color:var(--white);cursor:pointer}
-    .hqNt-btn.ok:hover{background:var(--accent-strong)}
+    @view-transition { navigation: auto; }
+
+    html {
+        --hq-vt-bg: #ffffff;
+        --hq-out: hqOutUp;
+        --hq-in: hqInUp;
+    }
+
+    html.dark {
+        --hq-vt-bg: #14161a;
+    }
+
+    html.hq-dir-fwd {
+        --hq-out: hqOutRight;
+        --hq-in: hqInLeft;
+    }
+
+    html.hq-dir-back {
+        --hq-out: hqOutLeft;
+        --hq-in: hqInRight;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        ::view-transition {
+            background-color: var(--hq-vt-bg, #ffffff);
+        }
+
+        ::view-transition-old(root) {
+            animation: var(--hq-out, hqOutUp) .34s cubic-bezier(.4, 0, .6, 1) both;
+        }
+
+        ::view-transition-new(root) {
+            animation: var(--hq-in, hqInUp) .46s cubic-bezier(.16, 1, .3, 1) both;
+        }
+
+        @keyframes hqOutUp {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateY(-56px); }
+        }
+
+        @keyframes hqInUp {
+            from { opacity: 0; transform: translateY(56px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes hqOutRight {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateX(64px); }
+        }
+
+        @keyframes hqInLeft {
+            from { opacity: 0; transform: translateX(-64px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes hqOutLeft {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateX(-64px); }
+        }
+
+        @keyframes hqInRight {
+            from { opacity: 0; transform: translateX(64px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    }
 </style>
 <div class="hqNt-mask" id="hqNtMask">
     <div class="hqNt-glass" role="dialog" aria-modal="true">
@@ -839,23 +907,23 @@
             <span class="tool-indicator" id="tool-indicator"></span>
             <button class="tool-item" data-tool="onekey" type="button">
                 <span class="tool-item-name">1026一键配置工具</span>
-                <span class="tool-item-meta" id="meta-onekey">最新 v2.45</span>
+                <span class="tool-item-meta" id="meta-onekey">最新</span>
             </button>
             <button class="tool-item active" data-tool="touping" type="button">
                 <span class="tool-item-name">fov-tool</span>
-                <span class="tool-item-meta" id="meta-touping">最新 v2.25</span>
+                <span class="tool-item-meta" id="meta-touping">最新</span>
             </button>
             <button class="tool-item" data-tool="shendun" type="button">
                 <span class="tool-item-name">1026过验证</span>
-                <span class="tool-item-meta" id="meta-shendun">最新 v1.8</span>
+                <span class="tool-item-meta" id="meta-shendun">最新</span>
             </button>
             <button class="tool-item" data-tool="changeid" type="button">
                 <span class="tool-item-name">1026修改ID工具</span>
-                <span class="tool-item-meta" id="meta-changeid">最新 v1.2</span>
+                <span class="tool-item-meta" id="meta-changeid">最新</span>
             </button>
             <button class="tool-item" data-tool="fangfeng" type="button">
                 <span class="tool-item-name">1026游戏清理+查举报</span>
-                <span class="tool-item-meta" id="meta-fangfeng">最新 v1.4</span>
+                <span class="tool-item-meta" id="meta-fangfeng">最新</span>
             </button>
         </nav>
 
@@ -866,7 +934,7 @@
             <section class="panel" id="panel-onekey">
                 <div class="panel-head">
                     <div>
-                        <h2>1026一键配置工具 <span class="ver-tag" id="latest-onekey">最新 v2.45</span></h2>
+                        <h2>1026一键配置工具 <span class="ver-tag" id="latest-onekey">最新</span></h2>
                     </div>
                     <div class="panel-actions">
                         <a href="play.html" class="btn btn-ghost btn-small">常见问题</a>
@@ -884,7 +952,7 @@
             <section class="panel active" id="panel-touping">
                 <div class="panel-head">
                     <div>
-                        <h2>fov-tool <span class="ver-tag" id="latest-touping">最新 v2.25</span></h2>
+                        <h2>fov-tool <span class="ver-tag" id="latest-touping">最新</span></h2>
                     </div>
                     <div class="panel-actions">
                         <button class="btn btn-ghost btn-small lb-open" type="button" data-full="toping.png">效果图</button>
@@ -907,7 +975,7 @@
             <section class="panel" id="panel-shendun">
                 <div class="panel-head">
                     <div>
-                        <h2>1026过验证 <span class="ver-tag" id="latest-shendun">最新 v1.8</span></h2>
+                        <h2>1026过验证 <span class="ver-tag" id="latest-shendun">最新</span></h2>
                     </div>
                     <div class="panel-actions">
                         <a href="https://wwaoj.lanzoul.com/b0188lmbad" class="icon-dl" aria-label="下载" title="下载" id="dl-shendun">
@@ -924,7 +992,7 @@
             <section class="panel" id="panel-changeid">
                 <div class="panel-head">
                     <div>
-                        <h2>1026修改ID工具 <span class="ver-tag" id="latest-changeid">最新 v1.2</span></h2>
+                        <h2>1026修改ID工具 <span class="ver-tag" id="latest-changeid">最新</span></h2>
                     </div>
                     <div class="panel-actions">
                         <a href="https://wwaoj.lanzoul.com/iNxQz46rk17g" target="_blank" rel="noopener" class="btn btn-ghost btn-small">卡密</a>
@@ -942,7 +1010,7 @@
             <section class="panel" id="panel-fangfeng">
                 <div class="panel-head">
                     <div>
-                        <h2>1026游戏清理+查举报 <span class="ver-tag" id="latest-fangfeng">最新 v1.4</span></h2>
+                        <h2>1026游戏清理+查举报 <span class="ver-tag" id="latest-fangfeng">最新</span></h2>
                     </div>
                     <div class="panel-actions">
                         <a href="https://wwaoj.lanzoul.com/iNxQz46rk17g" target="_blank" rel="noopener" class="btn btn-ghost btn-small">卡密</a>
@@ -1130,6 +1198,13 @@
                 .then(function (data) {
                     renderEntries(listEl, data);
                     setupCollapse(listEl);
+                    if (data && data.length && data[0].version) {
+                        var latestText = "最新 " + data[0].version;
+                        var metaEl = document.getElementById("meta-" + tid);
+                        if (metaEl) metaEl.textContent = latestText;
+                        var verEl = document.getElementById("latest-" + tid);
+                        if (verEl) verEl.textContent = latestText;
+                    }
                 })
                 .catch(function () {
                     if (listEl) listEl.innerHTML =
