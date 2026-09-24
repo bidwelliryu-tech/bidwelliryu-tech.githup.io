@@ -305,6 +305,32 @@
       font-weight: 600;
     }
 
+    .heading-note {
+      min-width: 0;
+
+      color: var(--gray-3);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .heading-note::before {
+      content: "";
+
+      display: inline-block;
+
+      width: 5px;
+      height: 5px;
+
+      margin-right: 6px;
+
+      border-radius: 50%;
+
+      background: var(--accent);
+      opacity: 0.7;
+
+      vertical-align: middle;
+    }
+
     .update-list {
       border-top: 1px solid var(--gray-4);
     }
@@ -674,6 +700,7 @@
     <section class="container updates">
       <div class="heading">
         <h2 class="heading-title">最近更新</h2>
+        <span class="heading-note">因为此站是备用站，内容变更可能较慢，不会像主站那么快。</span>
       </div>
       <div class="update-list" id="homeUpdates">
         <div class="update" style="grid-template-columns:1fr;color:var(--gray-3)"><div class="update-content" id="updLoading">正在加载…</div></div>
