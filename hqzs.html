@@ -16,13 +16,15 @@
   <meta name="twitter:title" content="赞赏支持-1026的小站">
   <meta name="twitter:description" content="您的赞赏是持续更新的动力">
   <meta name="twitter:image" content="https://hq1026.top/favicon.webp">
-  <link rel="preload" as="image" href="zanzhu.png">
+  <link rel="preload" as="image" href="wx.png">
   <link rel="preload" as="image" href="zfb.png">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body { background: #ffffff; font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif; color: #1e1e2e; line-height: 1.5; min-height: 100vh; padding: 20px; }
     .container { max-width: 500px; margin: 0 auto; padding: 20px 0 40px; }
-    .back-link { display: inline-block; margin-bottom: 20px; color: #2c7da0; text-decoration: none; font-size: 0.9rem; opacity: 0; animation: fadeInUp 0.4s ease forwards; animation-delay: 0.1s; }
+    .back-link { display: inline-flex; align-items: center; margin-bottom: 22px; padding: 9px 20px; color: #ffffff; background: #2c7da0; border-radius: 12px; text-decoration: none; font-size: 0.86rem; font-weight: 500; letter-spacing: 0.03em; box-shadow: 0 2px 8px rgba(44, 125, 160, 0.24); transition: background 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease; opacity: 0; animation: fadeInUp 0.4s ease forwards; animation-delay: 0.1s; }
+    .back-link:hover { background: #24698a; box-shadow: 0 6px 18px rgba(44, 125, 160, 0.32); transform: translateY(-1px); }
+    .back-link:active { transform: translateY(0) scale(0.99); }
     .sponsor-card { background: #ffffff; border-radius: 36px; padding: 2rem 1.5rem; border: 1px solid #f0f0f0; text-align: center; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.5s ease forwards; animation-delay: 0.2s; }
     .sponsor-title { font-size: 1.8rem; font-weight: 600; color: #1e1e2e; margin-bottom: 1rem; }
     .sponsor-desc { font-size: 1rem; color: #4a4a60; margin-bottom: 2rem; border-top: 1px solid #efeff4; padding-top: 1.2rem; line-height: 1.6; }
@@ -32,6 +34,11 @@
     .qr-item:last-child { animation-delay: 0.4s; }
     .qr-img { width: 100%; max-width: 220px; height: auto; border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); background: #fafafa; transition: transform 0.25s ease, box-shadow 0.25s ease; }
     .qr-img:hover { transform: translateY(-5px); box-shadow: 0 16px 28px rgba(0,0,0,0.1); }
+    .qr-img { cursor: zoom-in; }
+    .qr-viewer { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 99; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(12, 12, 16, 0.78); opacity: 0; pointer-events: none; transition: opacity 0.24s ease; }
+    .qr-viewer.open { opacity: 1; pointer-events: auto; }
+    .qr-viewer img { max-width: 100%; max-height: 100%; border-radius: 18px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); transform: scale(0.94); transition: transform 0.26s cubic-bezier(0.2, 0.8, 0.3, 1); }
+    .qr-viewer.open img { transform: scale(1); }
     .qr-label { margin-top: 0.5rem; font-size: 0.85rem; color: #7c7c8f; }
     .footer-note { margin-top: 2rem; font-size: 0.75rem; color: #9a9ab0; text-align: center; opacity: 0; animation: fadeInUp 0.4s ease forwards; animation-delay: 0.5s; }
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -51,7 +58,8 @@
       html.dark .qr-img:hover { box-shadow: 0 16px 28px rgba(0,0,0,0.4); }
       html.dark .qr-label { color: #8a8aa3; }
       html.dark .footer-note { color: #6a6a7a; }
-      html.dark .back-link { color: #a8896a; }
+      html.dark .back-link { color: #14161a; background: #a8896a; box-shadow: 0 2px 8px rgba(168, 137, 106, 0.3); }
+      html.dark .back-link:hover { background: #bb9b7a; box-shadow: 0 6px 18px rgba(168, 137, 106, 0.4); }
     
   </style>
 <script>try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");}catch(e){}</script>
@@ -107,22 +115,56 @@
 
 <body>
 <div class="container">
-  <a href="about.html" class="back-link">← 返回关于</a>
+  <a href="about.html" class="back-link">返回</a>
   <div class="sponsor-card">
     <div class="sponsor-title">赞赏支持</div>
     <div class="sponsor-desc">如果这些内容对你有帮助，欢迎赞赏支持服务器运营成本。</div>
     <div class="qr-grid">
       <div class="qr-item">
-        <img src="zanzhu.png" class="qr-img" alt="微信赞赏码" loading="eager">
-        <div class="qr-label">微信赞赏</div>
+        <img src="wx.png" class="qr-img" alt="微信赞赏码" loading="eager">
+        <div class="qr-label">微信</div>
       </div>
       <div class="qr-item">
         <img src="zfb.png" class="qr-img" alt="支付宝收款码" loading="eager">
-        <div class="qr-label">支付宝收款</div>
+        <div class="qr-label">支付宝</div>
       </div>
     </div>
     <div class="footer-note">感谢您的支持，本站会持续更新。</div>
   </div>
 </div>
+
+<div class="qr-viewer" id="qrViewer">
+  <img id="qrViewerImg" alt="">
+</div>
+
+<script>
+  (function () {
+    var viewer = document.getElementById("qrViewer");
+    var viewerImg = document.getElementById("qrViewerImg");
+    if (!viewer || !viewerImg) return;
+
+    function open(src, alt) {
+      viewerImg.src = src;
+      viewerImg.alt = alt || "";
+      viewer.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function close() {
+      viewer.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    document.querySelectorAll(".qr-img").forEach(function (img) {
+      img.addEventListener("click", function () { open(img.currentSrc || img.src, img.alt); });
+    });
+
+    viewer.addEventListener("click", close);
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+    });
+  })();
+</script>
 </body>
 </html>
