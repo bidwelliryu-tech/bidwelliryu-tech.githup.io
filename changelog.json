@@ -1,5 +1,13 @@
 [
   {
+    "version": "v2.652",
+    "dateTime": "2026.09.29 08:33:19",
+    "changes": [
+      "原密钥已吊销 更换了新的keybox✅✅❌"
+    ],
+    "downloadLink": ""
+  },
+  {
     "version": "v2.651",
     "dateTime": "2026.09.27 14:44:55",
     "changes": [
