@@ -1,5 +1,13 @@
 [
     {
+        "version": "v4.0.1",
+        "dateTime": "2026.10.05 23:52:11",
+        "changes": [
+            "修复了已知的问题"
+        ],
+        "downloadLink": ""
+    },
+    {
         "version": "v4.0",
         "dateTime": "2026.10.05 21:28:53",
         "changes": [
